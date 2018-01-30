@@ -80,14 +80,14 @@ SSH agent forwarding securely connects the instances within the VPC, which are c
     b. When you choose the **Instance ID**, EC2 displays details about the master instance, including the public DNS/IP address that you need to log in. Make a note of the address because you will need it in the next step.  
 ![](../images/Slide11.png)  
 
-2. Enable SSH agent forwarding. This enables communication with all of the instances in the private subnet. Using the DNS/IP address that you recorded in the first step, modify the SSH configuration to include these lines: 
+2. Enable SSH agent forwarding. This enables communication with all of the instances in the private subnet. Using the IP/DNS address that you recorded in the first step, modify the SSH configuration (~/.ssh/config) on your machine to include these lines: 
 
     	Host IP/DNS-from-above  
         ForwardAgent yes
 
 3. Log in to the master instance. If you have not already done so, follow the steps in [Securely Connect to Linux Instances Running in a Private Amazon VPC](https://aws.amazon.com/blogs/security/securely-connect-to-linux-instances-running-in-a-private-amazon-vpc/) to enable forwarding your credentials when you use SSH to connect to the master instance. If you neglect this step, distributed training that requires SSH communication will fail.  
 
-    On macOS, type:
+    On Ubuntu/RHEL, type:
 
          ssh -A <USER-ID>@<MASTER-WORKER-PUBLIC-DNS/IP>
          #USER-ID is ec2-user for Amazon Linux, ubuntu for Ubuntu
@@ -96,6 +96,13 @@ SSH agent forwarding securely connects the instances within the VPC, which are c
 
          ssh <USER-ID>@<MASTER-WORKER-PUBLIC-DNS/IP>
          #USER-ID is ec2-user for Amazon Linux, ubuntu for Ubuntu
+
+    On the macOS , type:
+         #Add instance private key to keychain
+         ssh-add -K  <private key>
+
+         ssh -A <USER-ID>@<MASTER-WORKER-PUBLIC-DNS/IP>
+         #USER-ID is ec2-user for Amazon Linux, ubuntu for Ubuntu    
 
 For examples of running distributed training, see [Deep Learning on AWS Using MXNet and TensorFlow](../README.md).
 
